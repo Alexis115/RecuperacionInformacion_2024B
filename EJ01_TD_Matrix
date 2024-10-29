@@ -1,0 +1,129 @@
+Ejercicio 01: Recuperación de Información Basado en el Modelo de Matriz Término-Documento
+En este ejercicio, trabajaremos con un corpus de documentos en formato JSON para implementar un sistema de Recuperación de Información basado en el modelo de espacio vectorial. Seguirás los siguientes pasos:
+
+Paso 1: Determinar un vocabulario
+El primer paso es cargar el corpus en formato JSON, extraer los textos de los documentos y crear el vocabulario.
+
+
+[4]
+0 s
+import json
+
+datos = []
+with open(file='/content/data/01tdmatrix_corpus.json', mode='r', encoding='utf-8') as file:
+    datos = json.load(file)
+
+[5]
+0 s
+print(datos[0]['text'].lower())
+la inteligencia artificial continúa avanzando rápidamente, transformando sectores como la salud y las finanzas. las empresas están adoptando algoritmos de aprendizaje automático para mejorar la eficiencia. sin embargo, el desafío principal sigue siendo garantizar que las decisiones basadas en datos sean justas y no perpetúen sesgos. la ética es fundamental en este contexto.
+
+[6]
+0 s
+print(datos[0]['text'].lower().split())
+['la', 'inteligencia', 'artificial', 'continúa', 'avanzando', 'rápidamente,', 'transformando', 'sectores', 'como', 'la', 'salud', 'y', 'las', 'finanzas.', 'las', 'empresas', 'están', 'adoptando', 'algoritmos', 'de', 'aprendizaje', 'automático', 'para', 'mejorar', 'la', 'eficiencia.', 'sin', 'embargo,', 'el', 'desafío', 'principal', 'sigue', 'siendo', 'garantizar', 'que', 'las', 'decisiones', 'basadas', 'en', 'datos', 'sean', 'justas', 'y', 'no', 'perpetúen', 'sesgos.', 'la', 'ética', 'es', 'fundamental', 'en', 'este', 'contexto.']
+
+[7]
+0 s
+vocab = set(datos[0]['text'].lower().split())
+print(vocab)
+print(len(vocab))
+{'garantizar', 'decisiones', 'fundamental', 'sean', 'basadas', 'transformando', 'eficiencia.', 'en', 'mejorar', 'sin', 'principal', 'salud', 'ética', 'empresas', 'artificial', 'es', 'avanzando', 'adoptando', 'como', 'sigue', 'este', 'desafío', 'para', 'la', 'de', 'continúa', 'aprendizaje', 'inteligencia', 'justas', 'datos', 'las', 'embargo,', 'rápidamente,', 'el', 'que', 'siendo', 'finanzas.', 'no', 'sesgos.', 'contexto.', 'automático', 'y', 'sectores', 'están', 'perpetúen', 'algoritmos'}
+46
+
+[8]
+0 s
+vocab = []
+for i in range(0,len(datos)):
+    vocab.extend(datos[i]['text'].lower().replace(',','').replace('.','').split())
+
+vocab = set(vocab)
+print(len(vocab))
+print(vocab)
+230
+{'garantizar', 'decisiones', 'pueden', 'también', 'enfermedades', 'transformando', 'vez', 'acceder', 'acceso', 'cuándo', 'reflexionar', 'mundos', 'distancia', 'sino', 'años', 'bienestar', 'personalizados', 'experiencia', 'enfoque', 'visuales', 'evolucionado', 'sigue', 'muchas', 'trabajos', 'libros', 'además', 'hábitos', 'un', 'transacciones', 'democratizando', 'cómo', 'convertido', 'contexto', 'inteligencia', 'producciones', 'consume', 'dispositivos', 'efectos', 'diagnostican', 'que', 'importar', 'mayores', 'y', 'consumidores', 'perpetúen', 'ofrecer', 'algoritmos', 'facilitando', 'temas', 'mejores', 'personalizadas', 'sean', 'prioridad', 'nivel', 'cuidados', 'eficiencia', 'promueven', 'e-sports', 'invita', 'ahora', 'en', 'crecimiento', 'sin', 'principal', 'recomendaciones', 'salud', 'literarios', 'tratan', 'nuevo', 'artificial', 'avanzando', 'alcanzado', 'electrónico', 'profesionales', 'pagos', 'accesibles', 'otros', 'sobre', 'tecnologías', 'para', 'siguen', 'digitales', 'nuevas', 'avanzadas', 'real', 'géneros', 'programas', 'con', 'ha', 'compras', 'tiempo', 'compramos', 'optimizando', 'usuario', 'donde', 'interacción', 'vida', 'atraen', 'datos', 'futuro', 'una', 'reto', 'integral', 'realistas', 'el', 'beneficios', 'embargo', 'demanda', 'impulsa', 'prometedor', 'rápidamente', 'inmersivos', 'tecnología', 'educación', 'ciencia', 'incorporando', 'jugadores', 'desde', 'portátiles', 'desafían', 'individual', 'mercado', 'médicos', 'basadas', 'sesgos', 'aquellos', 'contenido', 'ficción', 'habilidades', 'telemedicina', 'experiencias', 'ética', 'empresas', 'medicina', 'aumento', 'permitiendo', 'humanidad', 'cinematográficas', 'llevado', 'adoptando', 'como', 'tecnológicos', 'línea', 'virtuales', 'falta', 'solo', 'aumentada', 'permitido', 'streaming', 'entretiene', 'desafío', 'la', 'interactuar', 'aplicaciones', 'calidad', 'especialmente', 'buscan', 'crear', 'utilizan', 'personas', 'se', 'competencias', 'plataformas', 'personal', 'espectadores', 'no', 'siendo', 'escenas', 'más', 'viaje', 'educativa', 'sectores', 'están', 'cine', 'millones', 'cursos', 'realidad', 'uno', 'aunque', 'flexibilidad', 'avances', 'populares', 'cada', 'fundamental', 'diarias', 'películas', 'eficaces', 'cambiando', 'mejorar', 'finanzas', 'explorando', 'adopción', 'presencial', 'monitorean', 'ubicación', 'es', 'hasta', 'género', 'series', 'desarrollo', 'completo', 'implicaciones', 'mundo', 'mejorando', 'de', 'continúa', 'aprendizaje', 'sus', 'los', 'está', 'todo', 'justas', 'cambiado', 'herramientas', 'tratamientos', 'creciente', 'las', 'estudiantes', 'a', 'su', 'planetas', 'forma', 'transformado', 'automático', 'comercio', 'público', 'este', 'rápidos', 'saludables', 'videojuegos'}
+Paso 2: Calcular una matriz término-documento
+Una vez que tenemos el vocabulario, el siguiente paso es construir una matriz término-documento, que nos permitirá representar cada documento como un vector en el espacio de términos.
+
+
+[9]
+0 s
+def tdtransform(text):
+    doc = []
+    for word in vocab:
+        if word in text.lower().replace(',','').replace('.','').split():
+           doc.append(1)
+        else:
+            doc.append(0)
+    return doc
+
+[10]
+0 s
+tdmatrix = []
+for i in range(0,len(datos)):
+    doc = tdtransform(text=datos[i]['text'])
+    tdmatrix.append(doc)
+
+print(tdmatrix)
+[[1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0], [0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]]
+Paso 3: Obtener una representación de una query en el espacio término-documento
+Ahora vamos a representar una query como un vector en el mismo espacio de términos que hicimos para el corpus.
+
+
+[11]
+0 s
+query = "inteligencia artificial en medicina"
+print(tdtransform(query))
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+Paso 4: Calcular la distancia entre la query y todos los documentos del corpus
+Al obtener la distancia Jaccard entre la query y cada documento del corpus, calculamos la relevancia que tiene cada documento para la query
+
+
+[17]
+0 s
+import numpy as np
+
+#Función para tokenizar la query y crear su vector
+def vectorizar_query(query, vocab):
+    query_vector = []
+    for palabra in vocab:
+        query_vector.append(1 if palabra in query.lower().split() else 0)
+    return query_vector
+
+#Función para calcular la similitud coseno entre el vector de la query y los documentos
+def similitud_coseno(vector_query, matriz_documentos):
+    resultados_similitud = []
+    vector_query = np.array(vector_query)
+    
+    for doc_vector in matriz_documentos:
+        doc_vector = np.array(doc_vector)
+        cos_sim = np.dot(vector_query, doc_vector) / (np.linalg.norm(vector_query) * np.linalg.norm(doc_vector))
+        resultados_similitud.append(cos_sim)
+    
+    return resultados_similitud
+
+#Procesar query
+Query = "inteligencia artificial en finanzas"
+vector_query = vectorizar_query(Query, vocab)
+similitudes = similitud_coseno(vector_query, tdmatrix)
+
+
+
+Paso 5: Entregar los resultados de la búsqueda al usuario
+A partir de la query, debemos indicar al usuario cuáles documentos son los más relevantes. Se debe presentar la información en orden de relevancia.
+
+
+[18]
+0 s
+#Mostrar resultados ordenados por la relevancia del coumento segun la query
+resultados_ordenados = sorted(enumerate(similitudes), key=lambda x: x[1], reverse=True)
+for idx, similitud in resultados_ordenados:
+    print(f"Documento {idx}: Similitud coseno = {similitud}")
+Documento 0: Similitud coseno = 0.29488391230979427
+Documento 5: Similitud coseno = 0.23145502494313785
+Documento 1: Similitud coseno = 0.22613350843332272
+Documento 2: Similitud coseno = 0.07715167498104596
+Documento 7: Similitud coseno = 0.07715167498104596
+Documento 6: Similitud coseno = 0.07624928516630233
+Documento 3: Similitud coseno = 0.0
+Documento 4: Similitud coseno = 0.0
